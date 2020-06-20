@@ -22,7 +22,7 @@ weighting = 'icex_hanning'; % beamform window weighting
 directory = dir([prefix 'ACO0000*.DAT']);
 
 first_file = 1; % first file to read in
-last_file = first_file+400; % last file to read in (1800 files = 1hr)
+last_file = first_file+100; % last file to read in (1800 files = 1hr)
  
 % Read DATA
 aco_in = zeros(NUM_SAMPLES * (last_file-first_file), 32);
@@ -51,6 +51,18 @@ end
 data = (aco_in-mean(aco_in,1))./10^6; % de-mean and convert data to uPa
 time = 0:1/FS:size(data,1)/FS-1/FS; % create time axis
 
+%% View Spectrogram
+disp('Plotting Spectrogram ...')
+chn = 16;
+window = hamming(4096);
+NFFT = length(window);
+figure
+spectrogram(data(:,chn),window,[],NFFT,FS,'yaxis');
+title([ 'Channel = ',num2str(chn)]);
+set(gca,'Fontsize',25);
+%caxis([50 80]);
+ylim([0 6]);
+set(gcf, 'Units', 'Normalized', 'OuterPosition', [0 0 1 1]);
 
 %% Beamforming
 
