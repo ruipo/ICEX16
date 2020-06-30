@@ -452,24 +452,32 @@ usnr = sl-unl(:,1);
 dsnr = sl-dnl;
 
 figure
+subplot(2,1,1)
 h1 = pcolor(range,freq,usnr);
 set(h1,'Edgecolor','None');
-xlabel('Range (m)');
 ylabel('Frequency (Hz)')
 set(gca,'Fontsize',20);
-caxis([0 160])
+xlim([0 50000])
+xticks([0 5000 10000 15000 20000 25000 30000 35000 40000 45000 50000])
+xticklabels({'0','5','10','15','20','25','30','35','40','45','50'})
+caxis([50 110])
 colorbar
 colormap jet
+title('Signal Excess (150m Source with KI Modeled Surface Noise)')
 
-figure
+subplot(2,1,2)
 h2 = pcolor(range,freq,dsnr);
 set(h2,'Edgecolor','None');
-xlabel('Range (m)');
+xlabel('Range (km)');
 ylabel('Frequency (Hz)')
 set(gca,'Fontsize',20);
-caxis([0 160])
+xlim([0 50000])
+xticks([0 5000 10000 15000 20000 25000 30000 35000 40000 45000 50000])
+xticklabels({'0','5','10','15','20','25','30','35','40','45','50'})
+caxis([50 110])
 colorbar
 colormap jet
+title('Signal Excess (150m Source with Discrete Surface Noise at [0,0])')
 
 
 %% figure

@@ -275,27 +275,50 @@ testf = testf(reindex);
 
 %% plotting - depth vs dB @ frequency
 figure
+subplot(1,4,1)
+plot(SSP,Depth,'b','linewidth',2)
+grid on
+set(gca,'fontsize',20)
+xlabel('Sound Speed (m/s)')
+ylabel('Depth (m)')
+set(gca,'YDir','reverse')
+ylim([0 250])
+xlim([1430 1450])
+yticks([0 25 50 75 100 125 150 175 200 225 250])
+hold on
+plot([1430 1450],[73.42 73.42],'--r')
+plot([1430 1450],[238.6 238.6],'--r')
+title('ICEX16 SSP')
 
-flist = [100 500 1000 1500 2000 3000 6000];
+flist = [100 500 1000 1500 2000 3000];
 color = ['k','r','m','y','g','b','c'];
 shape = ['o','*','+','x','s','p','d'];
+[depth_interp_sort,odr] = sort(round(depth_interp,-1));
+
+subplot(1,4,[2 3 4]);
+h = [];
 for ff = 1:length(flist)
     f = flist(ff);
     [~,ind] = min(abs(f-freq));
 
     plot(10*log10(psd_mat(:,ind)/(1E-6)^2),-depth_interp,[color(ff) shape(ff)],'linewidth',1)
     hold on
+    h(ff) = plot(movmean(10*log10(psd_mat(odr,ind)/(1E-6)^2),75),movmean(-depth_interp_sort,75),color(ff),'linewidth',2);
     title('Noise Level vs. Depth');
     xlabel('NL (dB re 1\muPa^2/Hz)')
-    ylabel('Depth (m)')
+    %ylabel('Depth (m)')
     yticks([0 25 50 75 100 125 150 175 200 225 250])
     set(gca,'Yticklabel',[0 25 50 75 100 125 150 175 200 225 250]);
     set(gca,'Ydir','reverse')
     grid on
     set(gca,'fontsize',20);
+    xlim([48 85])
 end
 
-legend('100Hz', '500Hz','1000Hz','1500Hz','2000Hz','3000Hz','6000Hz');
+plot([40 90],[73.42 73.42],'--r')
+plot([40 90],[238.6 238.6],'--r')
+
+legend(h,'100Hz', '500Hz','1000Hz','1500Hz','2000Hz','3000Hz');
 %% Plotting - NL
 
 figpath = '/Users/Rui/Documents/Graduate/Research/ICEX:SIMI/ICEX16/icex_spl_sd/03-14-2016/figures/';
